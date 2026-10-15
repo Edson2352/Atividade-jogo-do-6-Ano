@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Time Explorer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div>
+      <div class="brand"> Ecos <span>do Tempo</span></div>
+      <div class="tagline">Cartas antigas. Portais escondidos. Histórias reais.</div>
+    </div>
+    <div class="topright">
+      <span class="chip">FANTASIA HISTÓRICA</span>
+      <span class="chip stars" id="score">✦ 0 fragmentos</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <div class="eyebrow">O Atlas das Eras · Capítulo 1</div>
+        <h1>O Atlas está perdendo suas memórias!</h1>
+        <p>Um atlas encantado guarda ecos de acontecimentos reais. Suas páginas estão desaparecendo — e só uma investigadora do tempo pode recuperá-las. Resolva o caso principal e explore outros mistérios pelo mundo.</p>
+      </div>
+      <div class="progress">
+        <span class="step active" id="s1">1 · Investigar</span>
+        <span class="step" id="s2">2 · Viajar</span>
+        <span class="step" id="s3">3 · Recuperar</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="panel">
+        <div class="phead">
+          <h2> Atlas interativo</h2>
+          <div class="zoom">
+            <button id="minus" aria-label="Diminuir zoom">−</button>
+            <button id="plus" aria-label="Aumentar zoom">+</button>
+            <button id="resetZoom" aria-label="Redefinir zoom">↺</button>
+          </div>
+        </div>
+        <div class="mapbox">
+          <div class="mapstage">
+            <svg id="map" viewBox="0 0 700 380" role="img" aria-label="Mapa ilustrado simplificado com países clicáveis">
+              <rect width="700" height="380" fill="#eaf4fa"/>
+              <path class="land" d="M48 91 L70 57 115 42 148 58 176 48 203 73 194 98 169 110 155 138 128 150 115 180 90 168 83 139 58 126Z"/>
+              <path class="land" d="M150 182 L178 190 197 223 188 258 204 286 190 329 173 350 160 312 148 276 136 242 139 210Z"/>
+              <path class="land" d="M295 74 L321 57 354 63 368 83 353 102 329 106 315 95Z"/>
+              <path class="land" d="M303 112 L337 101 370 116 390 145 379 181 357 202 347 239 329 263 314 230 307 195 288 161Z"/>
+              <path class="land" d="M360 76 L401 57 448 65 478 53 528 70 563 95 602 104 623 132 604 151 571 144 552 161 522 153 504 132 475 134 452 118 421 124 398 106 374 111Z"/>
+              <path class="land" d="M399 163 L429 154 460 170 477 202 465 238 440 260 416 239 407 209Z"/>
+              <path class="land" d="M543 216 L570 204 604 220 623 246 603 270 572 265 550 245Z"/>
+              <path class="land" d="M633 295 L652 287 666 300 655 315 638 312Z"/>
+              <g class="country" tabindex="0" role="button" aria-label="Estados Unidos" data-id="usa"><circle class="land" cx="130" cy="105" r="19"/><text x="130" y="109" text-anchor="middle">EUA</text></g>
+              <g class="country" tabindex="0" role="button" aria-label="Brasil" data-id="brazil"><circle class="land" cx="174" cy="257" r="19"/><text x="174" y="261" text-anchor="middle">BR</text></g>
+              <g class="country" tabindex="0" role="button" aria-label="França" data-id="france"><circle class="land" cx="351" cy="121" r="20"/><text x="351" y="125" text-anchor="middle">FR</text></g>
+              <g class="country" tabindex="0" role="button" aria-label="Egito" data-id="egypt"><circle class="land" cx="395" cy="164" r="19"/><text x="395" y="168" text-anchor="middle">EG</text></g>
+              <g class="country" tabindex="0" role="button" aria-label="China" data-id="china"><circle class="land" cx="523" cy="116" r="19"/><text x="523" y="120" text-anchor="middle">CN</text></g>
+              <text x="84" y="28" fill="#58778b" font-size="12" font-weight="900">AMÉRICA DO NORTE</text>
+              <text x="133" y="373" fill="#58778b" font-size="12" font-weight="900">AMÉRICA DO SUL</text>
+              <text x="296" y="45" fill="#58778b" font-size="12" font-weight="900">EUROPA</text>
+              <text x="440" y="40" fill="#58778b" font-size="12" font-weight="900">ÁSIA</text>
+              <text x="423" y="286" fill="#58778b" font-size="12" font-weight="900">ÁFRICA</text>
+              <text x="567" y="190" fill="#58778b" font-size="12" font-weight="900">OCEANIA</text>
+            </svg>
+          </div>
+          <div class="mapnote">Escolha um marcador para viajar. O mapa é ilustrativo nesta versão; os marcadores abrem casos históricos.</div>
+          <div class="legend">
+            <span><i class="dot"></i>Caso disponível</span>
+            <span><i class="dot green"></i>Memória recuperada</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="phead">
+          <h2 id="panelTitle"> Carta misteriosa</h2>
+          <span class="muted" id="caseLabel">CASO PRINCIPAL</span>
+        </div>
+        <div class="rightbody">
+          <div id="letter" class="letter">
+            <div class="eyebrow">Uma página desaparecida</div>
+            <h3>O grito por mudança</h3>
+            <p>“Estamos no século XVIII. Neste país europeu, muitas pessoas estão revoltadas com os privilégios da nobreza e do clero. Em 1789, uma revolução começou e mudou o rumo da história.”</p>
+            <p>O Atlas sussurra uma pista: <strong>a capital deste país é Paris.</strong> Descubra onde a memória está escondida!</p>
+            <div class="hint">✧ Dica mágica: os ecos só respondem quando você encontra o lugar correto.</div>
+          </div>
+
+          <div id="mission" class="mission hidden">
+            <div class="eyebrow">Portal aberto · Missão principal</div>
+            <h3>Encontre Napoleão Bonaparte</h3>
+            <p>Você chegou à França! Agora encontre o militar que ganhou destaque durante os anos da Revolução Francesa e descubra como ele chegou ao poder.</p>
+            <div class="character"></div>
+            <div class="charname">Napoleão Bonaparte</div>
+            <div class="chardesc">Militar e líder político francês</div>
+            <button class="btn full" id="meet">✧ Falar com Napoleão</button>
+          </div>
+
+          <div id="story" class="story hidden">
+            <div class="eyebrow">Memória recuperada · França, 1789</div>
+            <h3>A Revolução Francesa</h3>
+            <p>Em 1789, a França enfrentava uma crise financeira e uma sociedade marcada por desigualdades. O clero e a nobreza tinham privilégios, enquanto grande parte da população pagava impostos e tinha pouca influência nas decisões políticas.</p>
+            <p>Protestos e mudanças políticas enfraqueceram a monarquia. A tomada da Bastilha, em 14 de julho de 1789, tornou-se um símbolo da revolução. Nos anos seguintes, a monarquia foi abolida e a França tornou-se uma república.</p>
+            <p>Napoleão ganhou destaque militar durante esse período e assumiu o poder em 1799. Mais tarde, tornou-se imperador. A revolução espalhou debates sobre cidadania, igualdade perante a lei e direitos.</p>
+            <div class="fact"><strong> Curiosidade histórica</strong><br>14 de julho é feriado nacional na França e está ligado à memória da Revolução Francesa.</div>
+            <div class="fact"><strong> Pista geográfica</strong><br>A França fica na Europa Ocidental. Paris é sua capital e um importante centro político e cultural.</div>
+            <button class="btn full" id="finish">✦ Guardar fragmento no Atlas</button>
+          </div>
+
+          <div id="optionalIntro" class="locked hidden" style="background:#f5f0fc;border:1px solid #e3d8f5">
+            <div class="eyebrow">Caso opcional selecionado</div>
+            <h3 id="optionalTitle" style="font-family:Georgia,serif;font-size:22px;margin:8px 0">Mistério</h3>
+            <p id="optionalText" style="font-size:14px;line-height:1.6"></p>
+            <p id="optionalHint" style="font-size:12px;color:#68778a"></p>
+            <button class="btn full" id="solveOptional">✧ Resolver este caso</button>
+          </div>
+
+          <div id="optionalStory" class="story hidden">
+            <div class="eyebrow">Memória recuperada</div>
+            <h3 id="optionalStoryTitle"></h3>
+            <p id="optionalStoryText"></p>
+            <div class="fact" id="optionalFact"></div>
+            <button class="btn full" id="finishOptional">✦ Guardar fragmento no Atlas</button>
+          </div>
+
+          <div id="feedback" class="feedback" role="status"></div>
+
+          <div class="side-title"> Outros ecos pelo mundo <span class="muted">casos opcionais</span></div>
+          <div class="case-list" id="cases">
+            <button class="case" data-case="egypt"><span class="emoji"></span><strong>O segredo do Nilo</strong><small>Egito Antigo · civilização e rio</small><span class="status">Disponível</span></button>
+            <button class="case" data-case="brazil"><span class="emoji"></span><strong>Um grito de independência</strong><small>Brasil · 1822</small><span class="status">Disponível</span></button>
+            <button class="case" data-case="china"><span class="emoji"></span><strong>O caminho da seda</strong><small>China · comércio e rotas</small><span class="status">Disponível</span></button>
+            <button class="case" data-case="usa"><span class="emoji"></span><strong>Nasce uma nação</strong><small>América do Norte · 1776</small><span class="status">Disponível</span></button>
+          </div>
+
+          <div class="reward">
+            <div class="sigil"></div>
+            <div>
+              <strong id="rewardTitle">O Atlas das Eras</strong>
+              <span id="rewardText">Recupere memórias históricas para restaurar o atlas encantado. Casos concluídos ficam marcados no mapa.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>Protótipo 0.2 · História real com uma camada de fantasia · Conteúdo introdutório para crianças de 10 a 12 anos.</footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
