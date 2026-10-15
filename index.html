@@ -1,155 +1,520 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Time Explorer</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundo Arcano: O Mapa das Relíquias</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cinzel for fantasy headers, Quicksand for clean UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow: hidden;
+            background-color: #030712;
+        }
+        .font-fantasy {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Parchment Background Texture styling */
+        .parchment-bg {
+            background: linear-gradient(135deg, #fef6e4 0%, #f3e5c8 100%);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.7), inset 0 0 40px rgba(180, 130, 60, 0.3);
+            border: 3px solid #b8860b;
+        }
+
+        /* Glow Effects */
+        .glow-gold {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.6);
+        }
+        .glow-blue {
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+        }
+        .glow-purple {
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b8860b;
+            border-radius: 3px;
+        }
+
+        /* Compass Needle Transition */
+        #compassNeedle {
+            transition: transform 0.2s ease-out;
+        }
+
+        /* Glassmorphic UI overlays */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+    </style>
 </head>
-<body>
-  <header>
-    <div>
-      <div class="brand"> Ecos <span>do Tempo</span></div>
-      <div class="tagline">Cartas antigas. Portais escondidos. Histórias reais.</div>
-    </div>
-    <div class="topright">
-      <span class="chip">FANTASIA HISTÓRICA</span>
-      <span class="chip stars" id="score">✦ 0 fragmentos</span>
-    </div>
-  </header>
+<body class="w-screen h-screen relative bg-slate-950 text-white overflow-hidden">
 
-  <main>
-    <div class="hero">
-      <div>
-        <div class="eyebrow">O Atlas das Eras · Capítulo 1</div>
-        <h1>O Atlas está perdendo suas memórias!</h1>
-        <p>Um atlas encantado guarda ecos de acontecimentos reais. Suas páginas estão desaparecendo — e só uma investigadora do tempo pode recuperá-las. Resolva o caso principal e explore outros mistérios pelo mundo.</p>
-      </div>
-      <div class="progress">
-        <span class="step active" id="s1">1 · Investigar</span>
-        <span class="step" id="s2">2 · Viajar</span>
-        <span class="step" id="s3">3 · Recuperar</span>
-      </div>
-    </div>
+    <!-- CANVAS DO MAPA-MÚNDI -->
+    <canvas id="mapCanvas" class="w-full h-full absolute inset-0 z-0 cursor-grab active:cursor-grabbing"></canvas>
 
-    <div class="grid">
-      <section class="panel">
-        <div class="phead">
-          <h2> Atlas interativo</h2>
-          <div class="zoom">
-            <button id="minus" aria-label="Diminuir zoom">−</button>
-            <button id="plus" aria-label="Aumentar zoom">+</button>
-            <button id="resetZoom" aria-label="Redefinir zoom">↺</button>
-          </div>
-        </div>
-        <div class="mapbox">
-          <div class="mapstage">
-            <svg id="map" viewBox="0 0 700 380" role="img" aria-label="Mapa ilustrado simplificado com países clicáveis">
-              <rect width="700" height="380" fill="#eaf4fa"/>
-              <path class="land" d="M48 91 L70 57 115 42 148 58 176 48 203 73 194 98 169 110 155 138 128 150 115 180 90 168 83 139 58 126Z"/>
-              <path class="land" d="M150 182 L178 190 197 223 188 258 204 286 190 329 173 350 160 312 148 276 136 242 139 210Z"/>
-              <path class="land" d="M295 74 L321 57 354 63 368 83 353 102 329 106 315 95Z"/>
-              <path class="land" d="M303 112 L337 101 370 116 390 145 379 181 357 202 347 239 329 263 314 230 307 195 288 161Z"/>
-              <path class="land" d="M360 76 L401 57 448 65 478 53 528 70 563 95 602 104 623 132 604 151 571 144 552 161 522 153 504 132 475 134 452 118 421 124 398 106 374 111Z"/>
-              <path class="land" d="M399 163 L429 154 460 170 477 202 465 238 440 260 416 239 407 209Z"/>
-              <path class="land" d="M543 216 L570 204 604 220 623 246 603 270 572 265 550 245Z"/>
-              <path class="land" d="M633 295 L652 287 666 300 655 315 638 312Z"/>
-              <g class="country" tabindex="0" role="button" aria-label="Estados Unidos" data-id="usa"><circle class="land" cx="130" cy="105" r="19"/><text x="130" y="109" text-anchor="middle">EUA</text></g>
-              <g class="country" tabindex="0" role="button" aria-label="Brasil" data-id="brazil"><circle class="land" cx="174" cy="257" r="19"/><text x="174" y="261" text-anchor="middle">BR</text></g>
-              <g class="country" tabindex="0" role="button" aria-label="França" data-id="france"><circle class="land" cx="351" cy="121" r="20"/><text x="351" y="125" text-anchor="middle">FR</text></g>
-              <g class="country" tabindex="0" role="button" aria-label="Egito" data-id="egypt"><circle class="land" cx="395" cy="164" r="19"/><text x="395" y="168" text-anchor="middle">EG</text></g>
-              <g class="country" tabindex="0" role="button" aria-label="China" data-id="china"><circle class="land" cx="523" cy="116" r="19"/><text x="523" y="120" text-anchor="middle">CN</text></g>
-              <text x="84" y="28" fill="#58778b" font-size="12" font-weight="900">AMÉRICA DO NORTE</text>
-              <text x="133" y="373" fill="#58778b" font-size="12" font-weight="900">AMÉRICA DO SUL</text>
-              <text x="296" y="45" fill="#58778b" font-size="12" font-weight="900">EUROPA</text>
-              <text x="440" y="40" fill="#58778b" font-size="12" font-weight="900">ÁSIA</text>
-              <text x="423" y="286" fill="#58778b" font-size="12" font-weight="900">ÁFRICA</text>
-              <text x="567" y="190" fill="#58778b" font-size="12" font-weight="900">OCEANIA</text>
-            </svg>
-          </div>
-          <div class="mapnote">Escolha um marcador para viajar. O mapa é ilustrativo nesta versão; os marcadores abrem casos históricos.</div>
-          <div class="legend">
-            <span><i class="dot"></i>Caso disponível</span>
-            <span><i class="dot green"></i>Memória recuperada</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="phead">
-          <h2 id="panelTitle"> Carta misteriosa</h2>
-          <span class="muted" id="caseLabel">CASO PRINCIPAL</span>
-        </div>
-        <div class="rightbody">
-          <div id="letter" class="letter">
-            <div class="eyebrow">Uma página desaparecida</div>
-            <h3>O grito por mudança</h3>
-            <p>“Estamos no século XVIII. Neste país europeu, muitas pessoas estão revoltadas com os privilégios da nobreza e do clero. Em 1789, uma revolução começou e mudou o rumo da história.”</p>
-            <p>O Atlas sussurra uma pista: <strong>a capital deste país é Paris.</strong> Descubra onde a memória está escondida!</p>
-            <div class="hint">✧ Dica mágica: os ecos só respondem quando você encontra o lugar correto.</div>
-          </div>
-
-          <div id="mission" class="mission hidden">
-            <div class="eyebrow">Portal aberto · Missão principal</div>
-            <h3>Encontre Napoleão Bonaparte</h3>
-            <p>Você chegou à França! Agora encontre o militar que ganhou destaque durante os anos da Revolução Francesa e descubra como ele chegou ao poder.</p>
-            <div class="character"></div>
-            <div class="charname">Napoleão Bonaparte</div>
-            <div class="chardesc">Militar e líder político francês</div>
-            <button class="btn full" id="meet">✧ Falar com Napoleão</button>
-          </div>
-
-          <div id="story" class="story hidden">
-            <div class="eyebrow">Memória recuperada · França, 1789</div>
-            <h3>A Revolução Francesa</h3>
-            <p>Em 1789, a França enfrentava uma crise financeira e uma sociedade marcada por desigualdades. O clero e a nobreza tinham privilégios, enquanto grande parte da população pagava impostos e tinha pouca influência nas decisões políticas.</p>
-            <p>Protestos e mudanças políticas enfraqueceram a monarquia. A tomada da Bastilha, em 14 de julho de 1789, tornou-se um símbolo da revolução. Nos anos seguintes, a monarquia foi abolida e a França tornou-se uma república.</p>
-            <p>Napoleão ganhou destaque militar durante esse período e assumiu o poder em 1799. Mais tarde, tornou-se imperador. A revolução espalhou debates sobre cidadania, igualdade perante a lei e direitos.</p>
-            <div class="fact"><strong> Curiosidade histórica</strong><br>14 de julho é feriado nacional na França e está ligado à memória da Revolução Francesa.</div>
-            <div class="fact"><strong> Pista geográfica</strong><br>A França fica na Europa Ocidental. Paris é sua capital e um importante centro político e cultural.</div>
-            <button class="btn full" id="finish">✦ Guardar fragmento no Atlas</button>
-          </div>
-
-          <div id="optionalIntro" class="locked hidden" style="background:#f5f0fc;border:1px solid #e3d8f5">
-            <div class="eyebrow">Caso opcional selecionado</div>
-            <h3 id="optionalTitle" style="font-family:Georgia,serif;font-size:22px;margin:8px 0">Mistério</h3>
-            <p id="optionalText" style="font-size:14px;line-height:1.6"></p>
-            <p id="optionalHint" style="font-size:12px;color:#68778a"></p>
-            <button class="btn full" id="solveOptional">✧ Resolver este caso</button>
-          </div>
-
-          <div id="optionalStory" class="story hidden">
-            <div class="eyebrow">Memória recuperada</div>
-            <h3 id="optionalStoryTitle"></h3>
-            <p id="optionalStoryText"></p>
-            <div class="fact" id="optionalFact"></div>
-            <button class="btn full" id="finishOptional">✦ Guardar fragmento no Atlas</button>
-          </div>
-
-          <div id="feedback" class="feedback" role="status"></div>
-
-          <div class="side-title"> Outros ecos pelo mundo <span class="muted">casos opcionais</span></div>
-          <div class="case-list" id="cases">
-            <button class="case" data-case="egypt"><span class="emoji"></span><strong>O segredo do Nilo</strong><small>Egito Antigo · civilização e rio</small><span class="status">Disponível</span></button>
-            <button class="case" data-case="brazil"><span class="emoji"></span><strong>Um grito de independência</strong><small>Brasil · 1822</small><span class="status">Disponível</span></button>
-            <button class="case" data-case="china"><span class="emoji"></span><strong>O caminho da seda</strong><small>China · comércio e rotas</small><span class="status">Disponível</span></button>
-            <button class="case" data-case="usa"><span class="emoji"></span><strong>Nasce uma nação</strong><small>América do Norte · 1776</small><span class="status">Disponível</span></button>
-          </div>
-
-          <div class="reward">
-            <div class="sigil"></div>
-            <div>
-              <strong id="rewardTitle">O Atlas das Eras</strong>
-              <span id="rewardText">Recupere memórias históricas para restaurar o atlas encantado. Casos concluídos ficam marcados no mapa.</span>
+    <!-- HEADER / INTERFACE SUPERIOR -->
+    <header class="absolute top-0 left-0 right-0 z-20 p-4 pointer-events-none flex justify-between items-start">
+        <!-- Título e Nível do Jogador -->
+        <div class="glass-panel rounded-2xl p-3 px-5 flex items-center gap-4 pointer-events-auto border-amber-500/30 shadow-lg">
+            <div class="relative">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 to-yellow-300 flex items-center justify-center font-fantasy text-xl font-bold text-slate-950 shadow-inner">
+                    12
+                </div>
+                <div class="absolute -bottom-1 -right-1 bg-indigo-600 text-[10px] px-1.5 py-0.5 rounded-full font-bold border border-indigo-300">
+                    NÍVEL
+                </div>
             </div>
-          </div>
+            <div>
+                <h1 class="font-fantasy text-lg md:text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 tracking-wide">
+                    MUNDO ARCANO
+                </h1>
+                <p class="text-xs text-amber-200/80 font-medium">Explorador de Fronteiras Mágicas</p>
+            </div>
         </div>
-      </section>
+
+        <!-- Bússola Arcana & Controles de Câmera -->
+        <div class="flex items-center gap-3 pointer-events-auto">
+            <!-- Bússola Arcana -->
+            <div id="arcaneCompass" class="glass-panel rounded-2xl p-2.5 px-4 flex items-center gap-3 border-cyan-500/30 shadow-lg relative group">
+                <div class="relative w-11 h-11 flex items-center justify-center">
+                    <!-- Fundo do Quadrante -->
+                    <div class="absolute inset-0 rounded-full border-2 border-cyan-400/40 bg-slate-900/80 flex items-center justify-center">
+                        <div class="w-1 h-1 bg-cyan-300 rounded-full"></div>
+                    </div>
+                    <!-- Agulha da Bússola -->
+                    <div id="compassNeedle" class="w-full h-full flex items-center justify-center">
+                        <i class="fa-solid fa-location-arrow text-cyan-400 text-lg transform -rotate-45 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]"></i>
+                    </div>
+                </div>
+                <div class="text-left">
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-cyan-300/80 block">BÚSSOLA ARCANA</span>
+                    <span id="compassTargetName" class="text-xs font-semibold text-white max-w-[120px] truncate block">Cristo Redentor</span>
+                    <span id="compassDistance" class="text-[11px] font-mono text-cyan-200">240 léguas</span>
+                </div>
+            </div>
+
+            <!-- Botão de Áudio -->
+            <button id="soundToggleBtn" class="glass-panel hover:bg-slate-800/80 text-amber-300 p-3.5 rounded-2xl transition border-amber-500/20 active:scale-95 shadow-lg" title="Alternar Sons">
+                <i id="soundIcon" class="fa-solid fa-volume-high text-lg"></i>
+            </button>
+
+            <!-- Botões de Controle de Zoom / Reset -->
+            <div class="glass-panel rounded-2xl flex flex-col p-1 border-slate-700 shadow-lg">
+                <button id="zoomInBtn" class="p-2.5 text-slate-200 hover:text-amber-400 hover:bg-slate-800/60 rounded-xl transition" title="Aumentar Zoom">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <div class="h-px bg-slate-700/60 my-0.5"></div>
+                <button id="zoomOutBtn" class="p-2.5 text-slate-200 hover:text-amber-400 hover:bg-slate-800/60 rounded-xl transition" title="Diminuir Zoom">
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+                <div class="h-px bg-slate-700/60 my-0.5"></div>
+                <button id="resetViewBtn" class="p-2.5 text-slate-200 hover:text-cyan-400 hover:bg-slate-800/60 rounded-xl transition" title="Centralizar Mapa">
+                    <i class="fa-solid fa-compass"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- BARRA DE MAGIAS / MAGIAS DO MAPA (BOTTOM BAR) -->
+    <footer class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
+        <div class="glass-panel p-2 px-4 rounded-3xl border-amber-500/30 flex items-center gap-3 sm:gap-6 shadow-2xl">
+            <!-- Magia 1: Visão Arcana -->
+            <button id="spellArcaneVision" class="group relative flex flex-col items-center gap-1 p-2 rounded-2xl transition hover:bg-cyan-500/10 active:scale-95">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-b from-cyan-500 to-blue-700 flex items-center justify-center text-xl text-white shadow-md group-hover:shadow-cyan-500/50 group-hover:scale-105 transition">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+                <span class="text-[11px] font-bold text-cyan-200">Visão Arcana</span>
+                <!-- Tooltip -->
+                <div class="absolute -top-12 opacity-0 group-hover:opacity-100 transition pointer-events-none bg-slate-900 text-cyan-300 text-[10px] px-2.5 py-1 rounded-lg border border-cyan-500/40 whitespace-nowrap shadow-xl">
+                    Revela linhas de energia e portais
+                </div>
+            </button>
+
+            <div class="w-px h-10 bg-slate-700/60"></div>
+
+            <!-- Magia 2: Tempestade Estelar -->
+            <button id="spellStarStorm" class="group relative flex flex-col items-center gap-1 p-2 rounded-2xl transition hover:bg-amber-500/10 active:scale-95">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-b from-amber-400 to-yellow-600 flex items-center justify-center text-xl text-slate-950 shadow-md group-hover:shadow-amber-500/50 group-hover:scale-105 transition">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <span class="text-[11px] font-bold text-amber-200">Tempestade</span>
+                <!-- Tooltip -->
+                <div class="absolute -top-12 opacity-0 group-hover:opacity-100 transition pointer-events-none bg-slate-900 text-amber-300 text-[10px] px-2.5 py-1 rounded-lg border border-amber-500/40 whitespace-nowrap shadow-xl">
+                    Invoca chuva de poeira estelar
+                </div>
+            </button>
+
+            <div class="w-px h-10 bg-slate-700/60"></div>
+
+            <!-- Magia 3: Dissipar Névoa -->
+            <button id="spellClearFog" class="group relative flex flex-col items-center gap-1 p-2 rounded-2xl transition hover:bg-purple-500/10 active:scale-95">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-b from-purple-500 to-indigo-700 flex items-center justify-center text-xl text-white shadow-md group-hover:shadow-purple-500/50 group-hover:scale-105 transition">
+                    <i class="fa-solid fa-wind"></i>
+                </div>
+                <span class="text-[11px] font-bold text-purple-200">Dissipar Névoa</span>
+                <!-- Tooltip -->
+                <div class="absolute -top-12 opacity-0 group-hover:opacity-100 transition pointer-events-none bg-slate-900 text-purple-300 text-[10px] px-2.5 py-1 rounded-lg border border-purple-500/40 whitespace-nowrap shadow-xl">
+                    Abre regiões sombrias bloqueadas
+                </div>
+            </button>
+        </div>
+    </footer>
+
+    <!-- CARTÃO DE REGIÃO / PARCHMENT TOOLTIP MODAL -->
+    <div id="landmarkModal" class="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="parchmentCard" class="parchment-bg w-full max-w-md rounded-3xl p-6 text-slate-900 relative transform scale-90 transition-transform duration-300 shadow-2xl">
+            <!-- Botão Fechar -->
+            <button id="closeModalBtn" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-amber-900/10 hover:bg-amber-900/20 text-amber-900 flex items-center justify-center font-bold transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Cabeçalho com Ícone e Título -->
+            <div class="flex items-start gap-4 mb-4 pr-6">
+                <div id="modalIconContainer" class="w-14 h-14 rounded-2xl bg-amber-800 text-amber-100 flex items-center justify-center text-2xl shadow-md shrink-0 border border-amber-600">
+                    <i id="modalIcon" class="fa-solid fa-monument"></i>
+                </div>
+                <div>
+                    <span id="modalRegionBadge" class="text-[10px] font-extrabold uppercase tracking-widest text-amber-800 bg-amber-200/80 px-2 py-0.5 rounded-md inline-block mb-1 border border-amber-400">
+                        AMÉRICA DO SUL
+                    </span>
+                    <h2 id="modalTitle" class="font-fantasy text-xl font-black text-amber-950 leading-tight">
+                        Cristo Redentor
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Descrição -->
+            <p id="modalDescription" class="text-sm text-amber-900/90 leading-relaxed font-medium mb-4">
+                Santuário sagrado envolto em correntes de arcanum e vegetação tropical. Um forte feixe de luz solar abençoa os viajantes.
+            </p>
+
+            <!-- Informações do Local (Perigo e Colecionáveis) -->
+            <div class="bg-amber-900/10 rounded-2xl p-3.5 mb-5 border border-amber-700/20 space-y-2.5">
+                <!-- Nível de Perigo -->
+                <div class="flex items-center justify-between text-xs">
+                    <span class="font-bold text-amber-900">Nível Recomendado:</span>
+                    <span id="modalDangerBadge" class="font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white shadow-xs">
+                        Nível 1 • Seguro
+                    </span>
+                </div>
+
+                <div class="h-px bg-amber-800/15"></div>
+
+                <!-- Artefatos da Região -->
+                <div>
+                    <span class="text-[11px] font-extrabold uppercase text-amber-900/80 block mb-1">
+                        <i class="fa-solid fa-gem text-amber-700 mr-1"></i> Relíquias Regionais:
+                    </span>
+                    <div id="modalRelicsList" class="flex flex-wrap gap-1.5">
+                        <span class="bg-amber-100 text-amber-900 text-[11px] font-semibold px-2 py-0.5 rounded-lg border border-amber-300">
+                            ✨ Cristal de Jade
+                        </span>
+                        <span class="bg-amber-100 text-amber-900 text-[11px] font-semibold px-2 py-0.5 rounded-lg border border-amber-300">
+                            🪶 Pena Solar
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações -->
+            <div class="flex items-center gap-3">
+                <button id="fastTravelBtn" class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 text-slate-950 font-fantasy font-black tracking-wide text-sm shadow-lg hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2 border border-yellow-300">
+                    <i class="fa-solid fa-bolt text-amber-950"></i>
+                    <span>VIAJAR PELO PORTAL</span>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <footer>Protótipo 0.2 · História real com uma camada de fantasia · Conteúdo introdutório para crianças de 10 a 12 anos.</footer>
-  </main>
+    <!-- BANNER DE NOTIFICAÇÕES (TOAST) -->
+    <div id="toastNotification" class="fixed top-20 left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-0 transition-all duration-300 transform -translate-y-2">
+        <div class="glass-panel px-5 py-2.5 rounded-full border-cyan-400/50 text-cyan-200 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-2xl">
+            <i id="toastIcon" class="fa-solid fa-sparkles text-amber-400"></i>
+            <span id="toastMessage">Magia Arcana Ativada!</span>
+        </div>
+    </div>
 
-  <script src="script.js"></script>
-</body>
-</html>
+    <script>
+        /**
+         * MUNDO ARCANO - MAPA INTERATIVO (ENGINE & LÓGICA DO JOGO)
+         * Desenvolvimento focado na faixa de 10 a 12 anos.
+         */
+
+        // ==========================================
+        // 1. CONFIGURAÇÕES & DADOS DOS LOCAIS DO MAPA
+        // ==========================================
+        
+        // Locais com coordenadas reais convertidas proporcionalmente para a Projeção Equirretangular (-180 a 180, -90 a 90)
+        const LANDMARKS_DATA = [
+            {
+                id: 'cristo',
+                name: 'Cristo Redentor & Santuário',
+                region: 'América do Sul',
+                lon: -43.21, lat: -22.95,
+                type: 'sanctuary',
+                color: '#10b981', // Verde esmeralda
+                icon: 'fa-cross',
+                level: 'Nível 1 • Iniciante',
+                levelColor: 'bg-emerald-600',
+                description: 'Um santuário abençoado no topo de florestas tropicais exuberantes. A energia da natureza fortalece os exploradores.',
+                relics: ['✨ Cristal de Jade Guanabara', '🪶 Pena de Arara Dourada']
+            },
+            {
+                id: 'gize',
+                name: 'Pirâmides de Gizé & Templo Sol',
+                region: 'África',
+                lon: 31.13, lat: 29.97,
+                type: 'sanctuary',
+                color: '#f59e0b', // Dourado
+                icon: 'fa-monument',
+                level: 'Nível 4 • Intermediário',
+                levelColor: 'bg-amber-600',
+                description: 'Estruturas milenares que canalizam o poder do sol e segredos arcanos sob as areias douradas do deserto.',
+                relics: ['☀️ Gema do Fogo Solar', '📜 Escriba de Ouro Purificado']
+            },
+            {
+                id: 'eiffel',
+                name: 'Torre Eiffel Arcanum',
+                region: 'Europa',
+                lon: 2.29, lat: 48.85,
+                type: 'portal',
+                portalType: 'continental',
+                color: '#38bdf8', // Azul celeste
+                icon: 'fa-tower-cell',
+                level: 'Nível 2 • Fácil',
+                levelColor: 'bg-teal-600',
+                description: 'Antena mágica que conecta os reinos europeus por meio de pulsos arcanos cintilantes.',
+                relics: ['⚙️ Engrenagem de Luz Astral', '🌹 Rosa de Prata']
+            },
+            {
+                id: 'fuji',
+                name: 'Monte Fuji & Portal Astral',
+                region: 'Ásia',
+                lon: 138.72, lat: 35.36,
+                type: 'sanctuary',
+                color: '#a855f7', // Roxo místico
+                icon: 'fa-mountain-sun',
+                level: 'Nível 6 • Avançado',
+                levelColor: 'bg-purple-600',
+                description: 'Vulcão sagrado envolto por cerejeiras mágicas e neve eterna. Porta de entrada para os espíritos do vento.',
+                relics: ['🌸 Flor de Cerejeira Astral', '❄️ Orbe de Neve Mística']
+            },
+            {
+                id: 'corais',
+                name: 'Portal das Marés Abissais',
+                region: 'Oceania',
+                lon: 147.69, lat: -18.28,
+                type: 'portal',
+                portalType: 'maritime',
+                color: '#06b6d4', // Turquesa
+                icon: 'fa-water',
+                level: 'Nível 5 • Intermediário',
+                levelColor: 'bg-cyan-600',
+                description: 'Portal marinho cintilante guardado por corais brilhantes e correntes de água mágica cristalina.',
+                relics: ['🦪 Pérola das Profundezas', '🔱 Tridente de Coral Luminescente']
+            },
+            {
+                id: 'canion',
+                name: 'Cânion Astral dos Ancestrais',
+                region: 'América do Norte',
+                lon: -112.11, lat: 36.10,
+                type: 'sanctuary',
+                color: '#e11d48', // Vermelho Rubi
+                icon: 'fa-volcano',
+                level: 'Nível 3 • Médio',
+                levelColor: 'bg-emerald-600',
+                description: 'Garganta de rocha avermelhada que ressoa com os trovões arcanos dos antigos mestres da terra.',
+                relics: ['⚡ Totem do Trovão', '💎 Semente de Rocha Mística']
+            },
+            {
+                id: 'antartida',
+                name: 'Portal Secreto do Vazio',
+                region: 'Dimensão Oculta',
+                lon: 0.0, lat: -82.0,
+                type: 'portal',
+                portalType: 'secret',
+                color: '#c084fc', // Violeta intenso
+                icon: 'fa-dungeon',
+                level: 'Nível 10 • Sombrio',
+                levelColor: 'bg-red-700',
+                isLocked: true,
+                description: 'Portal fenda dimensional congelado sob a névoa escura do sul. Requer dissipação de névoa para atravessar.',
+                relics: ['🌌 Núcleo da Galáxia', '🗝️ Chave dos Reinos Esquecidos']
+            }
+        ];
+
+        // Simplificação de polígonos dos continentes (Latitude/Longitude aproximadas para estilo visual stylized 2.5D)
+        const CONTINENTS_PATHS = [
+            // América do Norte
+            [[-165,65], [-140,70], [-80,72], [-55,50], [-75,25], [-105,20], [-120,32], [-160,55]],
+            // América do Sul
+            [[-80,10], [-50,10], [-35,-10], [-40,-35], [-70,-55], [-75,-20], [-80,10]],
+            // Europa
+            [[-10,36], [30,40], [45,60], [25,70], [-10,62], [-10,36]],
+            // África
+            [[-17,35], [35,35], [50,12], [42,-20], [20,-35], [10,-30], [-15,10], [-17,35]],
+            // Ásia
+            [[40,40], [60,65], [100,75], [170,65], [140,35], [100,10], [60,25], [40,40]],
+            // Oceania
+            [[112,-15], [153,-15], [150,-38], [115,-35], [112,-15]]
+        ];
+
+        // ==========================================
+        // 2. SISTEMA DE ÁUDIO WEB AUDIO API
+        // ==========================================
+        class SoundEngine {
+            constructor() {
+                this.ctx = null;
+                this.enabled = true;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            playClick() {
+                if (!this.enabled) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.08);
+            }
+
+            playWarp() {
+                if (!this.enabled) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                // Sub bass sweep
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 1.2);
+                
+                // Filtro passa-baixas dinâmico
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(300, now);
+                filter.frequency.linearRampToValueAtTime(3000, now + 1.2);
+
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 1.4);
+
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(now + 1.4);
+            }
+
+            playSpell(type) {
+                if (!this.enabled) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const notes = type === 'star' ? [523.25, 659.25, 783.99, 1046.50] : [440, 554.37, 659.25];
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                    gain.gain.setValueAtTime(0.1, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.4);
+                });
+            }
+        }
+
+        const soundEngine = new SoundEngine();
+
+        // ==========================================
+        // 3. ESTADO GLOBAL DA APLICAÇÃO
+        // ==========================================
+        const canvas = document.getElementById('mapCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const state = {
+            // Transformações da Câmera
+            camera: {
+                x: 0,
+                y: 0,
+                zoom: 1,
+                targetX: 0,
+                targetY: 0,
+                targetZoom: 1
+            },
+            // Posição do Herói (Explorador)
+            hero: {
+                lon: -43.21,
+                lat: -22.95,
+                currX: 0,
+                currY: 0
+            },
+            // Arraste com o Mouse
+            isDragging: false,
+            dragStart: { x: 0, y: 0 },
+            // Elementos Ativos
+            selectedLandmark: LANDMARKS_DATA[0],
+            hoveredLandmark: null,
+            // Magias e Efeitos Ativos
+            spells: {
+                arcaneVision: false,
+                starStormTimer: 0,
+                fogCleared: false
+            },
+            // Animação de Teleporte
+            warpEffect: {
+                active: false,
+                progress: 0,
+                targetLon: 0,
+                targetLat: 0
+            },
+            // Partículas
+            particles: [],
+            starStormParticles: [],
+            time: 0
+        };
+
+        // ==========================================
+        // 4. CONVERSOR DE COORDENADAS (MAP PROJECTION)
+        // ==========================================
+        function lonLatToWorld(lon, lat) {
+            //
