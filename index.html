@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Special+Elite&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Estilos Customizados -->
+    <!-- Estilos do Jogo -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-stone-950 text-stone-100 min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-amber-700 selection:text-white">
@@ -118,63 +118,89 @@
             </div>
         </section>
 
-        <!-- FASE 2: MAPA-MÚNDI INTERATIVO -->
+        <!-- FASE 2: QUADRO MAPA-MÚNDI DE CORTIÇA INTERATIVO (ESTILO STALO) -->
         <section id="screen-map" class="w-full max-w-5xl hidden opacity-0 transition-all duration-700 transform scale-95 z-20">
-            <div class="vintage-map-bg border-2 border-amber-900/60 rounded-xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
-                <div class="text-center mb-6">
-                    <span class="text-amber-500 text-xs uppercase tracking-widest font-historical">Navegação Geográfica Temporal</span>
-                    <h2 class="font-historical text-2xl sm:text-3xl text-amber-100 font-bold mt-1">Selecione o Destino Correto</h2>
-                    <p class="text-stone-400 text-sm mt-1">Cruze as pistas da carta para encontrar o país correto da linha temporal.</p>
+            <div class="vintage-map-bg border-2 border-amber-900/60 rounded-xl p-4 sm:p-8 shadow-2xl relative overflow-hidden">
+                <div class="text-center mb-4">
+                    <span class="text-amber-500 text-xs uppercase tracking-widest font-historical">Mapeamento Tático em Cortiça</span>
+                    <h2 class="font-historical text-2xl sm:text-3xl text-amber-100 font-bold mt-1">Selecione o Pino no Mapa</h2>
+                    <p class="text-stone-400 text-sm mt-1">Examine as pistas da carta e clique no pino correspondente no quadro de cortiça.</p>
                 </div>
 
-                <!-- Grid de Países Interativos -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 my-8">
-                    <button onclick="handleCountryClick('germany')" class="group p-4 bg-stone-900/80 hover:bg-stone-800 border border-stone-700/50 hover:border-amber-500 rounded-lg text-left transition-all">
-                        <div class="text-amber-500 font-historical font-bold mb-1"><i class="fa-solid fa-landmark mr-2"></i> Alemanha</div>
-                        <p class="text-xs text-stone-400">Berlim - Reich germânico.</p>
-                    </button>
+                <!-- Estrutura do Quadro de Cortiça Stalo -->
+                <div class="cork-frame my-4">
+                    <div class="cork-board w-full h-[360px] sm:h-[460px] relative overflow-hidden rounded">
+                        
+                        <!-- Desenho Vetorial do Mapa-Múndi impresso na cortiça -->
+                        <svg class="world-map-svg absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1000 500" preserveAspectRatio="none">
+                            <path fill="#2b1a0e" d="M150,120 Q200,80 300,110 T350,220 Q280,280 200,240 T100,180 Z" /> <!-- América do Norte -->
+                            <path fill="#2b1a0e" d="M280,260 Q340,280 320,380 T260,450 Q230,380 240,300 Z" /> <!-- América do Sul -->
+                            <path fill="#2b1a0e" d="M460,90 Q540,80 580,140 T500,200 Q450,160 460,90 Z" /> <!-- Europa -->
+                            <path fill="#2b1a0e" d="M450,210 Q550,200 560,340 T480,420 Q420,320 450,210 Z" /> <!-- África -->
+                            <path fill="#2b1a0e" d="M590,80 Q800,60 850,220 T680,320 Q580,250 590,80 Z" /> <!-- Ásia -->
+                            <path fill="#2b1a0e" d="M780,340 Q880,330 860,420 T760,410 Z" /> <!-- Oceania -->
+                            <path fill="#2b1a0e" d="M265,240 Q280,235 275,250 Z" /> <!-- Caribe / Cuba -->
+                            <path fill="#2b1a0e" d="M850,160 Q870,150 865,200 Z" /> <!-- Japão -->
+                            <path fill="#2b1a0e" d="M470,120 Q480,110 475,130 Z" /> <!-- Reino Unido -->
+                        </svg>
 
-                    <button onclick="handleCountryClick('italy')" class="group p-4 bg-stone-900/80 hover:bg-stone-800 border border-stone-700/50 hover:border-amber-400 rounded-lg text-left transition-all">
-                        <div class="text-amber-400 font-historical font-bold mb-1"><i class="fa-solid fa-boot mr-2"></i> Itália</div>
-                        <p class="text-xs text-stone-400">Roma - Península em bota (1943).</p>
-                    </button>
+                        <!-- Pinos de Fixação Interativos (Locais do Jogo) -->
+                        <div onclick="handleCountryClick('usa')" class="cork-pin" style="top: 32%; left: 24%;">
+                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                            <div class="pin-needle"></div>
+                            <div class="pin-label">Estados Unidos</div>
+                        </div>
 
-                    <button onclick="handleCountryClick('cuba')" class="group p-4 bg-stone-900/80 hover:bg-stone-800 border border-stone-700/50 hover:border-amber-400 rounded-lg text-left transition-all">
-                        <div class="text-amber-400 font-historical font-bold mb-1"><i class="fa-solid fa-umbrella-beach mr-2"></i> Cuba</div>
-                        <p class="text-xs text-stone-400">Havana - Caribe (1962).</p>
-                    </button>
+                        <div onclick="handleCountryClick('cuba')" class="cork-pin" style="top: 48%; left: 28%;">
+                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                            <div class="pin-needle"></div>
+                            <div class="pin-label">Cuba</div>
+                        </div>
 
-                    <button onclick="handleCountryClick('france')" class="group p-4 bg-stone-900/80 hover:bg-stone-800 border border-stone-700/50 hover:border-amber-400 rounded-lg text-left transition-all">
-                        <div class="text-amber-400 font-historical font-bold mb-1"><i class="fa-solid fa-wine-glass mr-2"></i> França</div>
-                        <p class="text-xs text-stone-400">Paris - Europa Ocidental (1789).</p>
-                    </button>
+                        <div onclick="handleCountryClick('uk')" class="cork-pin" style="top: 25%; left: 47%;">
+                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                            <div class="pin-needle"></div>
+                            <div class="pin-label">Reino Unido</div>
+                        </div>
 
-                    <button onclick="handleCountryClick('usa')" class="group p-4 bg-stone-900/80 hover:bg-stone-800 border border-stone-700/50 hover:border-amber-400 rounded-lg text-left transition-all">
-                        <div class="text-amber-400 font-historical font-bold mb-1"><i class="fa-solid fa-flag-usa mr-2"></i> Estados Unidos</div>
-                        <p class="text-xs text-stone-400">Washington D.C. - América do Norte (1865).</p>
-                    </button>
+                        <div onclick="handleCountryClick('france')" class="cork-pin" style="top: 30%; left: 49%;">
+                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                            <div class="pin-needle"></div>
+                            <div class="pin-label">França</div>
+                        </div>
 
-                    <button onclick="handleCountryClick('soviet')" class="group p-4 bg-stone-900/80 hover:bg-stone-800 border border-stone-700/50 hover:border-amber-500 rounded-lg text-left transition-all">
-                        <div class="text-amber-500 font-historical font-bold mb-1"><i class="fa-solid fa-snowflake mr-2"></i> União Soviética</div>
-                        <p class="text-xs text-stone-400">Moscou - Frente Oriental.</p>
-                    </button>
+                        <div onclick="handleCountryClick('germany')" class="cork-pin" style="top: 27%; left: 52%;">
+                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                            <div class="pin-needle"></div>
+                            <div class="pin-label">Alemanha</div>
+                        </div>
 
-                    <button onclick="handleCountryClick('uk')" class="group p-4 bg-stone-900/80 hover:bg-stone-800 border border-stone-700/50 hover:border-amber-500 rounded-lg text-left transition-all">
-                        <div class="text-amber-500 font-historical font-bold mb-1"><i class="fa-solid fa-crown mr-2"></i> Reino Unido</div>
-                        <p class="text-xs text-stone-400">Londres - Ilhas Britânicas.</p>
-                    </button>
+                        <div onclick="handleCountryClick('italy')" class="cork-pin" style="top: 35%; left: 53%;">
+                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                            <div class="pin-needle"></div>
+                            <div class="pin-label">Itália</div>
+                        </div>
 
-                    <button onclick="handleCountryClick('japan')" class="group p-4 bg-stone-900/80 hover:bg-stone-800 border border-stone-700/50 hover:border-amber-500 rounded-lg text-left transition-all">
-                        <div class="text-amber-500 font-historical font-bold mb-1"><i class="fa-solid fa-sun mr-2"></i> Japão</div>
-                        <p class="text-xs text-stone-400">Tóquio - Império do Sol Nascente.</p>
-                    </button>
+                        <div onclick="handleCountryClick('soviet')" class="cork-pin" style="top: 24%; left: 63%;">
+                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                            <div class="pin-needle"></div>
+                            <div class="pin-label">União Soviética</div>
+                        </div>
+
+                        <div onclick="handleCountryClick('japan')" class="cork-pin" style="top: 38%; left: 86%;">
+                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                            <div class="pin-needle"></div>
+                            <div class="pin-label">Japão</div>
+                        </div>
+
+                    </div>
                 </div>
 
                 <div class="flex justify-between items-center border-t border-stone-800 pt-4">
                     <button onclick="backToLetter()" class="text-stone-400 hover:text-amber-300 text-sm flex items-center gap-2 transition-colors">
                         <i class="fa-solid fa-arrow-left"></i> Reabrir Carta
                     </button>
-                    <span class="text-xs text-stone-500 font-typewriter">SISTEMA DE LOCALIZAÇÃO ATIVO</span>
+                    <span class="text-xs text-stone-500 font-typewriter">QUADRO DE TACHINHAS ATIVO</span>
                 </div>
             </div>
         </section>
@@ -271,7 +297,7 @@
         CHRONOS ENGINE // MULTI-MISSION PROTOCOL © 1943-2026
     </footer>
 
-    <!-- Script de Lógica do Jogo -->
+    <!-- Lógica em JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
