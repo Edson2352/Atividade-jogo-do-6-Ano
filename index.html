@@ -118,81 +118,66 @@
             </div>
         </section>
 
-        <!-- FASE 2: QUADRO MAPA-MÚNDI DE CORTIÇA INTERATIVO (ESTILO STALO) -->
+        <!-- FASE 2: QUADRO MAPA-MÚNDI DE CORTIÇA STALO INTERATIVO -->
         <section id="screen-map" class="w-full max-w-5xl hidden opacity-0 transition-all duration-700 transform scale-95 z-20">
-            <div class="vintage-map-bg border-2 border-amber-900/60 rounded-xl p-4 sm:p-8 shadow-2xl relative overflow-hidden">
+            <div class="vintage-map-bg border-2 border-amber-900/60 rounded-xl p-4 sm:p-6 shadow-2xl relative overflow-hidden">
                 <div class="text-center mb-4">
-                    <span class="text-amber-500 text-xs uppercase tracking-widest font-historical">Mapeamento Tático em Cortiça</span>
-                    <h2 class="font-historical text-2xl sm:text-3xl text-amber-100 font-bold mt-1">Selecione o Pino no Mapa</h2>
-                    <p class="text-stone-400 text-sm mt-1">Examine as pistas da carta e clique no pino correspondente no quadro de cortiça.</p>
+                    <span class="text-amber-500 text-xs uppercase tracking-widest font-historical">Mapeamento Tático Stalo</span>
+                    <h2 class="font-historical text-2xl sm:text-3xl text-amber-100 font-bold mt-1">Selecione a Localização no Quadro</h2>
+                    <p class="text-stone-400 text-sm mt-1">Analise as pistas da carta e clique sobre o país correspondente no quadro de cortiça.</p>
                 </div>
 
-                <!-- Estrutura do Quadro de Cortiça Stalo -->
-                <div class="cork-frame my-4">
-                    <div class="cork-board w-full h-[360px] sm:h-[460px] relative overflow-hidden rounded">
-                        
-                        <!-- Desenho Vetorial do Mapa-Múndi impresso na cortiça -->
-                        <svg class="world-map-svg absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1000 500" preserveAspectRatio="none">
-                            <path fill="#2b1a0e" d="M150,120 Q200,80 300,110 T350,220 Q280,280 200,240 T100,180 Z" /> <!-- América do Norte -->
-                            <path fill="#2b1a0e" d="M280,260 Q340,280 320,380 T260,450 Q230,380 240,300 Z" /> <!-- América do Sul -->
-                            <path fill="#2b1a0e" d="M460,90 Q540,80 580,140 T500,200 Q450,160 460,90 Z" /> <!-- Europa -->
-                            <path fill="#2b1a0e" d="M450,210 Q550,200 560,340 T480,420 Q420,320 450,210 Z" /> <!-- África -->
-                            <path fill="#2b1a0e" d="M590,80 Q800,60 850,220 T680,320 Q580,250 590,80 Z" /> <!-- Ásia -->
-                            <path fill="#2b1a0e" d="M780,340 Q880,330 860,420 T760,410 Z" /> <!-- Oceania -->
-                            <path fill="#2b1a0e" d="M265,240 Q280,235 275,250 Z" /> <!-- Caribe / Cuba -->
-                            <path fill="#2b1a0e" d="M850,160 Q870,150 865,200 Z" /> <!-- Japão -->
-                            <path fill="#2b1a0e" d="M470,120 Q480,110 475,130 Z" /> <!-- Reino Unido -->
-                        </svg>
+                <!-- Moldura e Imagem Real do Mapa de Cortiça Stalo -->
+                <div class="stalo-map-container my-4 shadow-2xl">
+                    <img src="https://stalo.com.br/wp-content/uploads/2021/08/MUNDO_1_b03c7d46-1887-48a2-976c-f13686e81e5a.webp" alt="Quadro Mapa Múndi de Cortiça Stalo" class="stalo-map-img">
+                    
+                    <!-- Pinos Interativos Posicionados sobre o Mapa Real Stalo -->
+                    <div onclick="handleCountryClick('usa')" class="cork-pin" style="top: 45%; left: 23%;" title="Estados Unidos">
+                        <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                        <div class="pin-needle"></div>
+                        <div class="pin-label">EUA</div>
+                    </div>
 
-                        <!-- Pinos de Fixação Interativos (Locais do Jogo) -->
-                        <div onclick="handleCountryClick('usa')" class="cork-pin" style="top: 32%; left: 24%;">
-                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
-                            <div class="pin-needle"></div>
-                            <div class="pin-label">Estados Unidos</div>
-                        </div>
+                    <div onclick="handleCountryClick('cuba')" class="cork-pin" style="top: 53%; left: 28%;" title="Cuba">
+                        <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                        <div class="pin-needle"></div>
+                        <div class="pin-label">Cuba</div>
+                    </div>
 
-                        <div onclick="handleCountryClick('cuba')" class="cork-pin" style="top: 48%; left: 28%;">
-                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
-                            <div class="pin-needle"></div>
-                            <div class="pin-label">Cuba</div>
-                        </div>
+                    <div onclick="handleCountryClick('uk')" class="cork-pin" style="top: 41%; left: 47%;" title="Reino Unido">
+                        <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                        <div class="pin-needle"></div>
+                        <div class="pin-label">Reino Unido</div>
+                    </div>
 
-                        <div onclick="handleCountryClick('uk')" class="cork-pin" style="top: 25%; left: 47%;">
-                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
-                            <div class="pin-needle"></div>
-                            <div class="pin-label">Reino Unido</div>
-                        </div>
+                    <div onclick="handleCountryClick('france')" class="cork-pin" style="top: 45%; left: 49%;" title="França">
+                        <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                        <div class="pin-needle"></div>
+                        <div class="pin-label">França</div>
+                    </div>
 
-                        <div onclick="handleCountryClick('france')" class="cork-pin" style="top: 30%; left: 49%;">
-                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
-                            <div class="pin-needle"></div>
-                            <div class="pin-label">França</div>
-                        </div>
+                    <div onclick="handleCountryClick('germany')" class="cork-pin" style="top: 43%; left: 51%;" title="Alemanha">
+                        <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                        <div class="pin-needle"></div>
+                        <div class="pin-label">Alemanha</div>
+                    </div>
 
-                        <div onclick="handleCountryClick('germany')" class="cork-pin" style="top: 27%; left: 52%;">
-                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
-                            <div class="pin-needle"></div>
-                            <div class="pin-label">Alemanha</div>
-                        </div>
+                    <div onclick="handleCountryClick('italy')" class="cork-pin" style="top: 47%; left: 51.5%;" title="Itália">
+                        <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                        <div class="pin-needle"></div>
+                        <div class="pin-label">Itália</div>
+                    </div>
 
-                        <div onclick="handleCountryClick('italy')" class="cork-pin" style="top: 35%; left: 53%;">
-                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
-                            <div class="pin-needle"></div>
-                            <div class="pin-label">Itália</div>
-                        </div>
+                    <div onclick="handleCountryClick('soviet')" class="cork-pin" style="top: 38%; left: 68%;" title="União Soviética / Rússia">
+                        <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                        <div class="pin-needle"></div>
+                        <div class="pin-label">Rússia / URSS</div>
+                    </div>
 
-                        <div onclick="handleCountryClick('soviet')" class="cork-pin" style="top: 24%; left: 63%;">
-                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
-                            <div class="pin-needle"></div>
-                            <div class="pin-label">União Soviética</div>
-                        </div>
-
-                        <div onclick="handleCountryClick('japan')" class="cork-pin" style="top: 38%; left: 86%;">
-                            <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
-                            <div class="pin-needle"></div>
-                            <div class="pin-label">Japão</div>
-                        </div>
-
+                    <div onclick="handleCountryClick('japan')" class="cork-pin" style="top: 45%; left: 84.5%;" title="Japão">
+                        <div class="pin-head"><i class="fa-solid fa-thumbtack"></i></div>
+                        <div class="pin-needle"></div>
+                        <div class="pin-label">Japão</div>
                     </div>
                 </div>
 
@@ -200,7 +185,7 @@
                     <button onclick="backToLetter()" class="text-stone-400 hover:text-amber-300 text-sm flex items-center gap-2 transition-colors">
                         <i class="fa-solid fa-arrow-left"></i> Reabrir Carta
                     </button>
-                    <span class="text-xs text-stone-500 font-typewriter">QUADRO DE TACHINHAS ATIVO</span>
+                    <span class="text-xs text-stone-500 font-typewriter">QUADRO DE CORTIÇA STALO ATIVO</span>
                 </div>
             </div>
         </section>
@@ -297,7 +282,7 @@
         CHRONOS ENGINE // MULTI-MISSION PROTOCOL © 1943-2026
     </footer>
 
-    <!-- Lógica em JavaScript -->
+    <!-- Lógica do Jogo -->
     <script src="script.js"></script>
 </body>
 </html>
