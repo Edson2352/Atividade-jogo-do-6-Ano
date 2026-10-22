@@ -149,7 +149,6 @@ function selectMission(missionId) {
 
 // Retornar ao Menu Principal
 function returnToMenu() {
-    // Esconde todas as telas ativas
     [screenLetter, screenMap, screenScene].forEach(s => {
         s.classList.add('opacity-0', 'scale-95');
         setTimeout(() => s.classList.add('hidden'), 300);
@@ -174,7 +173,7 @@ function transitionToMap() {
             screenMap.classList.remove('opacity-0', 'scale-95');
         }, 50);
     }, 300);
-    statusMission.innerText = "STATUS: SELECIONE O PAÍS NO MAPA";
+    statusMission.innerText = "STATUS: SELECIONE O PINO NO MAPA DE CORTIÇA";
 }
 
 // Voltar para Carta
@@ -200,7 +199,7 @@ function backToMap() {
             screenMap.classList.remove('opacity-0', 'scale-95');
         }, 50);
     }, 300);
-    statusMission.innerText = "STATUS: SELECIONE O PAÍS NO MAPA";
+    statusMission.innerText = "STATUS: SELECIONE O PINO NO MAPA DE CORTIÇA";
 }
 
 // Validação de Clique no Mapa
@@ -221,7 +220,7 @@ function handleCountryClick(countryKey) {
             statusMission.innerText = `STATUS: INFILTRADO EM ${mission.targetCountryName.toUpperCase()}`;
         }, 1200);
     } else {
-        showModal("Coordenadas Incorretas", "Este país não corresponde às pistas e coordenadas fornecidas pelo Alto Comando nesta missão.", "error");
+        showModal("Coordenadas Incorretas", "Este pino no mapa de cortiça não corresponde às pistas fornecidas pelo Alto Comando para esta missão.", "error");
     }
 }
 
