@@ -163,7 +163,7 @@ function returnToMenu() {
     statusMission.innerText = "STATUS: SELECIONE UMA MISSÃO";
 }
 
-// Transição Carta -> Mapa
+// Transição Carta -> Mapa de Cortiça Stalo
 function transitionToMap() {
     screenLetter.classList.add('opacity-0', 'scale-95');
     setTimeout(() => {
@@ -173,7 +173,7 @@ function transitionToMap() {
             screenMap.classList.remove('opacity-0', 'scale-95');
         }, 50);
     }, 300);
-    statusMission.innerText = "STATUS: SELECIONE O PINO NO MAPA DE CORTIÇA";
+    statusMission.innerText = "STATUS: SELECIONE O PINO NO QUADRO DE CORTIÇA STALO";
 }
 
 // Voltar para Carta
@@ -199,7 +199,7 @@ function backToMap() {
             screenMap.classList.remove('opacity-0', 'scale-95');
         }, 50);
     }, 300);
-    statusMission.innerText = "STATUS: SELECIONE O PINO NO MAPA DE CORTIÇA";
+    statusMission.innerText = "STATUS: SELECIONE O PINO NO QUADRO DE CORTIÇA STALO";
 }
 
 // Validação de Clique no Mapa
