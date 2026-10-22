@@ -1,0 +1,43 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.font-historical {
+    font-family: 'Cinzel', serif;
+}
+
+.font-typewriter {
+    font-family: 'Special Elite', cursive;
+}
+
+.parchment {
+    background: linear-gradient(135deg, #f4ecd8 0%, #e2cfb1 100%);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.7), inset 0 0 60px rgba(139,69,19,0.2);
+    border: 4px double #8b5a2b;
+}
+
+.vintage-map-bg {
+    background: radial-gradient(circle, #2c241d 0%, #15110e 100%);
+    background-image: 
+        radial-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 0),
+        radial-gradient(rgba(212, 175, 55, 0.05) 1px, #15110e 1px);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+}
+
+.scene-bg {
+    background: linear-gradient(to bottom, #1c1917 0%, #292524 50%, #0c0a09 100%);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #b45309;
+    border-radius: 4px;
+}
